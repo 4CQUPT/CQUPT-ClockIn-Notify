@@ -137,16 +137,16 @@ const push = async (textList: string[], opt: { type: string; num: string }) => {
   // 每次只能 @10 个人
   const push10 = async (text: string) =>
     (await got
-      .get(
+      .post(
         `https://qmsg.zendee.cn/${opt.type == "group" ? "group" : "send"}/${
           option.qmsg.token
         }`,
         {
           ...gotOption,
-          searchParams: queryString.stringify({
+          form: {
             msg: text,
             qq: opt.num
-          })
+          }
         }
       )
       .json()) as QmsgResponse
@@ -221,4 +221,4 @@ export const main_handler = async (event?: any, context?: any) => {
 }
 
 // 测试
-// await main_handler()
+// main_handler()
