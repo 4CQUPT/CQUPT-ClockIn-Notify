@@ -1,6 +1,6 @@
 import got from "got"
 import queryString from "query-string"
-import option from "option"
+import option from "./option"
 import { WeResponse, IStu, VikaResponse, QmsgResponse } from "./types"
 
 const gotOption = {
