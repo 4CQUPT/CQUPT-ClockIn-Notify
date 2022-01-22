@@ -187,7 +187,8 @@ const genPushText = (date: Date, unClock: IStu[]): string[] => {
   }
 }
 
-const main_handler = async () => {
+// 腾讯云入口函数
+export const main_handler = async (event?: any, context?: any) => {
   // 北京时间
   const date = new Date(
     Date.now() + (new Date().getTimezoneOffset() + 8 * 60) * 60 * 1000
@@ -219,9 +220,4 @@ const main_handler = async () => {
 }
 
 // 测试
-// main_handler()
-
-// 腾讯云入口函数
-exports.main_handler = async (event: any, context: any) => {
-  await main_handler()
-}
+// await main_handler()
