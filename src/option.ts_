@@ -1,0 +1,31 @@
+// 自行改文件名为 option.ts
+
+const option = {
+  time: {
+    // 每天第一次需要重置前一天没有打卡的人，然后再更新当天没有打卡的人
+    reset: 11,
+    // 此后只检查没打卡的人，更新打了卡的人
+    push: [12, 15, 18, 19, 20, 21, 22]
+  },
+  vika: {
+    // https://vika.cn/workbench/ {datasheetID = dstrcwkh7yDR } /viwk3A3aunc4S
+    datasheetId: "dstrcwkh7yDR",
+    token: "uskV3A6xxxxxxxxx"
+  },
+  qmsg: {
+    // https://qmsg.zendee.cn/api.html
+    token: "9b44cf0cc94f3bxxxxxxxxx",
+    // 测试用，发送到自己的 QQ
+    dev: {
+      type: "qq",
+      num: "283xxxx"
+    },
+    // 正式用，发送到群里
+    prod: {
+      type: "group",
+      num: "7292xxxxxxxx"
+    }
+  }
+}
+
+export default option
