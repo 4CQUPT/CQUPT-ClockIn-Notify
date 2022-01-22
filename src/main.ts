@@ -210,6 +210,7 @@ export const main_handler = async (event?: any, context?: any) => {
     await db.update(unClock, false)
   } else {
     const table = await db.get("not")
+    if (!table.length) return
     const { unClock, clocked } = await checkClock(table)
     // 推送未打卡的人
     if (option.time.push.includes(date.getHours()))
