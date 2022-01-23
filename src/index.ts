@@ -1,7 +1,7 @@
 import got from "got"
 import queryString from "query-string"
-import option from "./option"
-import { WeResponse, IStu, VikaResponse, QmsgResponse } from "./types"
+import option from "option"
+import { WeResponse, IStu, VikaResponse, QmsgResponse } from "types"
 
 const gotOption = {
   timeout: {
@@ -57,8 +57,7 @@ class Vika {
     const update10 = async (students: IStu[]) => {
       await got.patch(this.url, {
         headers: {
-          Authorization: "Bearer " + this.token,
-          "Content-Type": "application/json"
+          Authorization: "Bearer " + this.token
         },
         json: {
           fieldKey: "name",
@@ -91,8 +90,7 @@ const checkClock = async (
       .post("https://we.cqupt.edu.cn/api/mrdk/get_mrdk_flag.php", {
         headers: {
           "User-Agent":
-            "Mozilla/5.0 (iPad; CPU OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 MicroMessenger/8.0.4",
-          "Content-Type": "application/json"
+            "Mozilla/5.0 (iPad; CPU OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 MicroMessenger/8.0.4"
         },
         ...gotOption,
         json: {
@@ -151,12 +149,12 @@ const push = async (textList: string[], opt: { type: string; num: string }) => {
       )
       .json()) as QmsgResponse
 
-  const wait = (ms: number) =>
-    new Promise<void>(resolve => setTimeout(() => resolve(), ms))
+  const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+
   for (let i = 0, len = textList.length; i < len; i++) {
     try {
       // 需要间隔 5s
-      if (i) await wait(5000)
+      if (i) await delay(5000)
       const res = await push10(textList[i])
       if (!res.success) throw res.reason
     } catch (err) {
@@ -202,7 +200,7 @@ export const main_handler = async (event?: any, context?: any) => {
       true
     )
     const { unClock } = await checkClock(table)
-    push(
+    await push(
       [`打卡通知初始化成功，当前有 ${unClock.length} 人未打卡`],
       option.qmsg.dev
     )
@@ -214,7 +212,7 @@ export const main_handler = async (event?: any, context?: any) => {
     const { unClock, clocked } = await checkClock(table)
     // 推送未打卡的人
     if (option.time.push.includes(date.getHours()))
-      push(genPushText(date, unClock), option.qmsg.prod)
+      await push(genPushText(date, unClock), option.qmsg.prod)
     // 更新已打卡的人
     await db.update(clocked, true)
   }
